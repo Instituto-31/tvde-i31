@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TVDE — Instituto 31</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:14px;background:#1a1a1a;color:#f0f0f0}
+header{background:#FFD600;padding:16px 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;border-bottom:4px solid #000}
+header h1{font-size:20px;font-weight:900;color:#000}
+header h1 span{background:#000;color:#FFD600;padding:2px 8px;border-radius:4px;margin-right:6px}
+.sub{font-size:12px;color:#333;font-weight:600}
+.container{max-width:1400px;margin:0 auto;padding:20px}
+.tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:3px solid #FFD600;flex-wrap:wrap}
+.tab{padding:10px 20px;cursor:pointer;border-radius:6px 6px 0 0;font-size:13px;border:none;background:#2a2a2a;color:#aaa;font-weight:700}
+.tab.active{background:#FFD600;color:#000}
+.tab:hover:not(.active){background:#333;color:#FFD600}
+.sec{display:none}.sec.active{display:block}
+.card{background:#242424;border-radius:8px;border:1px solid #333;padding:18px 20px;margin-bottom:16px}
+.card-title{font-size:13px;font-weight:800;color:#FFD600;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #333;text-transform:uppercase;letter-spacing:.6px}
+.g6{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:18px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:18px}
+.met{background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:12px;text-align:center}
+.ml{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.mv{font-size:18px;font-weight:800;color:#FFD600}
+.ms{font-size:10px;color:#666;margin-top:2px}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th{background:#FFD600;color:#000;padding:8px 9px;text-align:left;font-weight:800;font-size:10px;white-space:nowrap;text-transform:uppercase}
+td{padding:7px 9px;border-bottom:1px solid #2e2e2e;vertical-align:middle;color:#ddd}
+tr:hover td{background:#2a2a2a}
+tfoot td{font-weight:800;background:#1a1a1a;border-top:2px solid #FFD600;color:#FFD600;font-size:11px}
+.tover{overflow-x:auto;border-radius:6px;border:1px solid #333}
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700}
+.bok{background:#1a3a1a;color:#4caf50;border:1px solid #4caf50}
+.bpend{background:#3a2a00;color:#FFD600;border:1px solid #FFD600}
+.btn{padding:9px 18px;border-radius:6px;border:none;font-size:13px;font-weight:800;cursor:pointer}
+.bty{background:#FFD600;color:#000}
+.bto{background:transparent;color:#FFD600;border:2px solid #FFD600}
+.bsm{padding:4px 9px;font-size:11px;border-radius:5px;border:none;cursor:pointer;font-weight:700;white-space:nowrap}
+.bsmy{background:#FFD600;color:#000}
+.bsmo{background:transparent;color:#FFD600;border:1px solid #FFD600}
+.di{width:68px;padding:4px 5px;border-radius:5px;border:1.5px solid #444;font-size:11px;text-align:right;background:#1a1a1a;color:#ddd}
+.di:focus{border-color:#FFD600;outline:none}
+.di.hv{border-color:#FFD600;background:#2a2200;color:#FFD600;font-weight:700}
+.ii{width:50px;padding:4px 5px;border-radius:5px;border:1.5px solid #444;font-size:11px;text-align:right;background:#1a1a1a;color:#ff9800}
+.ii:focus{border-color:#ff9800;outline:none}
+.ii.cx{border-color:#ff9800;background:#2a1a00;font-weight:700}
+.si{padding:3px 5px;border-radius:5px;border:1.5px solid #333;font-size:11px;background:#1a1a1a;color:#aeea00;cursor:pointer}
+.si:focus{outline:none;border-color:#aeea00}
+.uz{border:2.5px dashed #444;border-radius:10px;padding:30px 20px;text-align:center;cursor:pointer;transition:all .2s;background:#1e1e1e}
+.uz:hover,.uz.drag{background:#2a2200;border-color:#FFD600}
+.uz h3{font-size:14px;color:#FFD600;margin-bottom:4px;font-weight:800}
+.uz p{font-size:12px;color:#888}
+.fbox{background:#2a2200;border-left:4px solid #FFD600;padding:10px 14px;border-radius:0 6px 6px 0;font-size:12px;color:#FFD600;margin-bottom:14px;font-family:monospace}
+.ibox{background:#1e1e1e;border-left:4px solid #FFD600;padding:10px 14px;border-radius:0 6px 6px 0;font-size:12px;color:#aaa;margin-bottom:14px}
+.pbg{background:#333;border-radius:4px;height:8px;margin:8px 0 4px;overflow:hidden}
+.pb{height:100%;background:#FFD600;border-radius:4px;transition:width .4s}
+.fr{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.fr label{font-size:13px;color:#aaa;min-width:160px;font-weight:700}
+input[type=number],input[type=text],select{padding:7px 10px;border-radius:6px;border:1.5px solid #444;font-size:13px;background:#1a1a1a;color:#f0f0f0}
+input:focus,select:focus{border-color:#FFD600;outline:none}
+select option{background:#1a1a1a}
+.cu{background:#2a2a2a!important;color:#ccc!important}
+.cb{background:#1a3a28!important;color:#34d186!important}
+.cc{background:#1a3300!important;color:#aeea00!important}
+.cd{background:#3a2500!important;color:#FFD600!important}
+.ct{background:#2a2a00!important;color:#FFD600!important}
+.pt-u{display:inline-block;font-size:10px;padding:1px 5px;border-radius:3px;background:#333;color:#fff;font-weight:700;margin-left:2px}
+.pt-b{display:inline-block;font-size:10px;padding:1px 5px;border-radius:3px;background:#34d186;color:#000;font-weight:700;margin-left:2px}
+.ov{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.88);z-index:1000;align-items:center;justify-content:center;padding:16px}
+.sm{background:#1e1e1e;border:2px solid #FFD600;border-radius:12px;width:100%;max-width:540px;overflow:hidden}
+.sh{background:#FFD600;padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+.sh h2{font-size:15px;font-weight:900;color:#000}
+.sh .x{cursor:pointer;font-size:20px;color:#000;font-weight:900}
+.sb{padding:18px 20px;max-height:82vh;overflow-y:auto}
+.sr{background:#242424;border-radius:8px;padding:12px 14px;margin-bottom:14px;font-size:12px}
+.sr .rw{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #2e2e2e;color:#aaa}
+.sr .rw:last-child{border-bottom:none}
+.sr .rw b{color:#FFD600}
+.sr .rt{display:flex;justify-content:space-between;padding:10px 0 4px;font-size:15px;font-weight:800}
+.sa{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.sbtn{padding:14px 10px;border-radius:8px;border:2px solid;cursor:pointer;font-size:12px;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:5px;text-decoration:none}
+.sbtn .ic{font-size:22px}
+.sg{background:#1a0000;border-color:#EA4335;color:#EA4335}
+.sg:hover{background:#EA433518}
+.sw{background:#1a3a25;border-color:#25D366;color:#25D366}
+.sw:hover{background:#25D36618}
+.sp{background:#2a2200;border-color:#FFD600;color:#FFD600}
+.sp:hover{background:#FFD60018}
+.sc{background:#1a1a2a;border-color:#90caf9;color:#90caf9}
+.sc:hover{background:#90caf918}
+.cr{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.cr label{font-size:12px;color:#888;min-width:85px;font-weight:700}
+.cr input{flex:1;padding:6px 10px;border-radius:6px;border:1.5px solid #444;font-size:12px;background:#1a1a1a;color:#f0f0f0}
+.cr input:focus{border-color:#FFD600;outline:none}
+.csv{font-size:11px;color:#FFD600;cursor:pointer;text-decoration:underline;background:none;border:none}
+@media(max-width:800px){.g6{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(2,1fr)}}
+</style>
+<!-- Google API -->
+<script src="https://apis.google.com/js/api.js"></script>
+<script src="https://accounts.google.com/gsi/client"></script>
+</head>
+<body>
+<header>
+  <h1><span>I31</span> TVDE — Pagamentos Semanais</h1>
+  <span class="sub">Instituto 31, Lda &nbsp;·&nbsp; NIF 515 285 471</span>
+</header>
+<div class="container">
+  <div class="tabs">
+    <button class="tab active" id="tab-res" onclick="goTab('res')">📊 Pagamentos</button>
+    <button class="tab" id="tab-up" onclick="goTab('up')">📂 Carregar CSV</button>
+    <button class="tab" id="tab-cfg" onclick="goTab('cfg')">⚙️ Configurações</button>
+    <button class="tab" id="tab-hist" onclick="goTab('hist')">🗂️ Histórico</button>
+  </div>
+
+  <!-- PAGAMENTOS -->
+  <div id="res" class="sec active">
+    <div id="res-empty" style="display:none" class="card"><p style="text-align:center;color:#666;padding:30px">Carrega os CSVs no separador "Carregar CSV" para começar.</p></div>
+    <div id="res-body">
+      <div class="g6">
+        <div class="met"><div class="ml">Semana</div><div class="mv" id="m-sem" style="font-size:11px;margin-top:4px"></div></div>
+        <div class="met"><div class="ml">Uber bruto</div><div class="mv" style="color:#fff" id="m-ub"></div></div>
+        <div class="met"><div class="ml">Bolt líq.</div><div class="mv" style="color:#34d186" id="m-bl"></div></div>
+        <div class="met"><div class="ml">IVA cobrar</div><div class="mv" style="color:#aeea00" id="m-ivc"></div></div>
+        <div class="met"><div class="ml">Total despesas</div><div class="mv" style="color:#ff6b6b" id="m-desp"></div></div>
+        <div class="met"><div class="ml">Total a pagar</div><div class="mv" id="m-tot"></div></div>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:10px">
+          <div class="card-title" style="margin:0;border:none;padding:0">Pagamentos — <span id="m-sem2"></span></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="bsm bsmy" onclick="pagarTodos()">✅ Marcar todos pagos</button>
+            <button class="bsm bsmo" onclick="exportCSV()">⬇️ CSV</button>
+          </div>
+        </div>
+        <div class="ibox" style="font-size:11px">💡 Edita <b style="color:#FFD600">IVA Uber%</b>, <b style="color:#aeea00">IVA cobrar</b>, <b style="color:#FFD600">Aluguer</b>, <b style="color:#FFD600">Via Verde</b> e <b style="color:#FFD600">Carregamentos</b> directamente. Clica <b style="color:#FFD600">📤</b> para enviar o recibo.</div>
+        <div style="margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:#666"><span>Progresso</span><span id="p-lbl">0%</span></div>
+          <div class="pbg"><div class="pb" id="p-bar" style="width:0%"></div></div>
+        </div>
+        <div class="tover">
+          <table>
+            <thead>
+              <tr>
+                <th rowspan="2" style="min-width:130px">Motorista</th>
+                <th class="cu" colspan="3">UBER</th>
+                <th class="cb" colspan="2">BOLT</th>
+                <th class="cc" colspan="2">IVA A COBRAR</th>
+                <th class="cd" colspan="6">DESPESAS</th>
+                <th class="ct" rowspan="2">A receber</th>
+                <th rowspan="2">Estado</th>
+                <th rowspan="2">📤</th>
+              </tr>
+              <tr>
+                <th class="cu">Bruto</th><th class="cu">IVA%</th><th class="cu">IVA €</th>
+                <th class="cb">Líq.</th><th class="cb">IVA Bolt</th>
+                <th class="cc">Taxa</th><th class="cc">Valor</th>
+                <th class="cd">Slot</th><th class="cd">Aluguer</th><th class="cd">Via Verde</th><th class="cd">Carreg.</th><th class="cd">Tot.desp.</th><th class="cd">Rend.líq.</th>
+              </tr>
+            </thead>
+            <tbody id="r-body"></tbody>
+            <tfoot id="r-foot"></tfoot>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Registar transferência</div>
+        <div class="fr"><label>Motorista</label><select id="t-mot" style="min-width:280px"><option value="">-- selecionar --</option></select></div>
+        <div class="fr"><label>Valor (€)</label><input type="number" id="t-val" min="0" step="0.01" style="width:140px"></div>
+        <div class="fr"><label>Referência</label><input type="text" id="t-ref" placeholder="REF..." style="width:220px"></div>
+        <div style="display:flex;gap:10px;align-items:center;margin-top:8px">
+          <button class="btn bty" onclick="regTransf()">Confirmar transferência</button>
+          <span id="t-msg" style="font-size:13px;color:#4caf50;font-weight:700"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UPLOAD -->
+  <div id="up" class="sec">
+    <div class="fbox">Fórmula: <b>A receber = (Uber líq. − IVA Uber) + Bolt líq. + IVA cobrar − Slot − Aluguer − Via Verde − Carregamentos</b></div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-title" style="color:#fff">📁 CSV Uber</div>
+        <div class="uz" id="dz-uber" onclick="document.getElementById('fi-uber').click()" ondragover="dg(event,'uber',1)" ondragleave="dg(event,'uber',0)" ondrop="dp(event,'uber')">
+          <h3 id="ut">⬆ Arrasta o CSV da Uber</h3>
+          <p id="us">Uber Fleet → Pagamentos → Por viagem</p>
+          <br><button class="btn bto" style="font-size:12px;padding:6px 14px;margin-top:8px" onclick="event.stopPropagation();document.getElementById('fi-uber').click()">Selecionar</button>
+        </div>
+        <input type="file" id="fi-uber" accept=".csv" style="display:none" onchange="lf(this.files[0],'uber')">
+        <div id="mu" style="margin-top:8px;font-size:12px"></div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:#34d186">📁 CSV Bolt</div>
+        <div class="uz" id="dz-bolt" onclick="document.getElementById('fi-bolt').click()" ondragover="dg(event,'bolt',1)" ondragleave="dg(event,'bolt',0)" ondrop="dp(event,'bolt')">
+          <h3 id="bt" style="color:#34d186">⬆ Arrasta o CSV da Bolt</h3>
+          <p id="bs">Bolt Driver Portal → Relatório de ganhos</p>
+          <br><button class="btn" style="background:transparent;color:#34d186;border:2px solid #34d186;font-size:12px;padding:6px 14px;font-weight:800;cursor:pointer;border-radius:6px" onclick="event.stopPropagation();document.getElementById('fi-bolt').click()">Selecionar</button>
+        </div>
+        <input type="file" id="fi-bolt" accept=".csv" style="display:none" onchange="lf(this.files[0],'bolt')">
+        <div id="mb" style="margin-top:8px;font-size:12px"></div>
+      </div>
+    </div>
+    <div class="card" id="pv-card" style="display:none">
+      <div class="card-title">Pré-visualização — <span id="pv-sem"></span></div>
+      <div class="g4">
+        <div class="met"><div class="ml">Motoristas</div><div class="mv" id="pv-n">0</div></div>
+        <div class="met"><div class="ml">Uber bruto</div><div class="mv" id="pv-u">0</div></div>
+        <div class="met"><div class="ml">Bolt líq.</div><div class="mv" style="color:#34d186" id="pv-b">0</div></div>
+        <div class="met"><div class="ml">Total a pagar</div><div class="mv" id="pv-t">0</div></div>
+      </div>
+      <div class="tover">
+        <table>
+          <thead><tr><th>Motorista</th><th class="cu">Uber bruto</th><th class="cb">Bolt líq.</th><th class="cu">IVA Uber</th><th class="cd">Slot</th><th class="ct">A receber</th></tr></thead>
+          <tbody id="pv-body"></tbody>
+          <tfoot id="pv-foot"></tfoot>
+        </table>
+      </div>
+      <p style="font-size:11px;color:#666;margin:10px 0">ℹ️ IVA cobrar, Aluguer, Via Verde e Carregamentos ajustam-se na tabela de pagamentos.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+        <button class="btn bty" onclick="confirmar()">✅ Confirmar e guardar</button>
+        <button class="btn bto" onclick="cancelar()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIG -->
+  <div id="cfg" class="sec">
+    <div class="card" style="border-color:#FFD600">
+      <div class="card-title" style="color:#FFD600">🔑 Gmail API — Envio Automático</div>
+      <div style="background:#2a2200;border-left:4px solid #FFD600;padding:10px 14px;border-radius:0 6px 6px 0;font-size:12px;color:#aaa;margin-bottom:14px;line-height:1.7">
+        Para enviar emails automaticamente, precisas de um <b style="color:#FFD600">Google Client ID</b>.<br>
+        1. Vai a <a href="https://console.cloud.google.com/" target="_blank" style="color:#FFD600">console.cloud.google.com</a> → Criar projecto<br>
+        2. APIs &amp; Serviços → Credenciais → Criar credencial → ID de cliente OAuth 2.0 → Aplicação Web<br>
+        3. Em "Origens JavaScript autorizadas" adiciona o URL desta página<br>
+        4. Copia o Client ID e cola abaixo
+      </div>
+      <div class="fr"><label>Google Client ID</label><input type="text" id="gcid-inp" placeholder="xxxxxxxxxx.apps.googleusercontent.com" style="width:380px;font-size:12px" value=""></div>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap">
+        <button class="btn bty" onclick="saveGCID()">Guardar e activar</button>
+        <button class="btn bto" id="gauth-cfg-btn" onclick="doGmailAuth()" style="display:none">🔑 Autenticar Gmail</button>
+        <span id="gcid-msg" style="font-size:13px;color:#4caf50;font-weight:700"></span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Configurações globais</div>
+      <div class="fr"><label>IVA Uber global (%)</label><input type="number" id="cfg-iva" value="6" min="0" max="100" step="0.1" style="width:80px"><span style="font-size:12px;color:#666;margin-left:8px">Editável individualmente na tabela</span></div>
+      <div class="fr"><label>Slot semanal global (€)</label><input type="number" id="cfg-slot" value="35" min="0" step="0.01" style="width:100px"></div>
+      <button class="btn bty" onclick="saveCfg()" style="margin-top:8px">Guardar</button>
+      <span id="cfg-msg" style="font-size:13px;color:#4caf50;font-weight:700;margin-left:12px"></span>
+    </div>
+    <div class="card">
+      <div class="card-title">Configurações por motorista</div>
+      <p style="font-size:12px;color:#666;margin-bottom:14px">Email, WhatsApp, IBAN, Aluguer fixo, Slot e taxas de IVA — guardados permanentemente.</p>
+      <div id="cfg-drv"><p style="font-size:13px;color:#666">Carrega um CSV primeiro para ver os motoristas.</p></div>
+    </div>
+  </div>
+
+  <!-- HISTÓRICO -->
+  <div id="hist" class="sec">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <div class="card-title" style="margin:0;border:none;padding:0">Histórico</div>
+        <button class="bsm bsmo" onclick="exportHistCSV()">⬇️ Exportar CSV completo</button>
+      </div>
+      <div id="hist-body"></div>
+    </div>
+  </div>
+</div>
+
+<!-- GMAIL AUTH BAR -->
+<div id="gauth-bar" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:999;background:#1a3a1a;border-top:2px solid #25D366;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+  <div style="display:flex;align-items:center;gap:10px">
+    <span id="gauth-dot" style="width:10px;height:10px;border-radius:50%;background:#ff6b6b;display:inline-block"></span>
+    <span id="gauth-txt" style="font-size:13px;color:#aaa">Gmail não autenticado</span>
+  </div>
+  <button id="gauth-btn" class="btn bty" style="font-size:12px;padding:7px 16px" onclick="doGmailAuth()">🔑 Ligar Gmail</button>
+</div>
+
+<!-- SEND MODAL -->
+<div id="ov" class="ov" onclick="if(event.target===this)closeSend()">
+  <div class="sm">
+    <div class="sh"><h2>📤 <span id="sn-nome"></span></h2><span class="x" onclick="closeSend()">✕</span></div>
+    <div class="sb">
+      <div class="sr" id="sn-rec"></div>
+      <hr style="border:none;border-top:1px solid #333;margin:14px 0">
+      <div style="margin-bottom:14px">
+        <div class="cr"><label>📧 Email</label><input type="text" id="sn-em" placeholder="email@exemplo.com"><button class="csv" onclick="saveContact()">Guardar</button></div>
+        <div class="cr"><label>📱 WhatsApp</label><input type="text" id="sn-wa" placeholder="+351 9xx xxx xxx"><button class="csv" onclick="saveContact()">Guardar</button></div>
+        <div class="cr"><label>🏦 IBAN</label><input type="text" id="sn-ib" placeholder="PT50 0000..."><button class="csv" onclick="saveContact()">Guardar</button></div>
+      </div>
+      <hr style="border:none;border-top:1px solid #333;margin:14px 0">
+      <div class="sa">
+        <button class="sbtn sg" id="send-gmail-btn" onclick="doGmail()"><span class="ic">✉️</span><span id="send-gmail-lbl">Gmail</span></button>
+        <button class="sbtn sw" onclick="doWA()"><span class="ic">💬</span><span>WhatsApp</span></button>
+        <button class="sbtn sp" onclick="doPDF()"><span class="ic">🖨️</span><span>Imprimir / PDF</span></button>
+        <button class="sbtn sc" onclick="doCopy()"><span class="ic">📋</span><span>Copiar texto</span></button>
+      </div>
+      <div id="sn-msg" style="font-size:12px;color:#4caf50;text-align:center;min-height:18px"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+var G={cfg:{iva:6,slot:35},slots:{},aluguer:{},emails:{},wa:{},iban:{},ivaUber:{},ivaCob:{},semanas:{},list:[]};
+(function(){
+  try{G.cfg=JSON.parse(localStorage.getItem('i31_cfg'))||G.cfg;}catch(e){}
+  try{G.slots=JSON.parse(localStorage.getItem('i31_slots'))||{};}catch(e){}
+  try{G.aluguer=JSON.parse(localStorage.getItem('i31_aluguer'))||{};}catch(e){}
+  try{G.emails=JSON.parse(localStorage.getItem('i31_emails'))||{};}catch(e){}
+  try{G.wa=JSON.parse(localStorage.getItem('i31_wa'))||{};}catch(e){}
+  try{G.iban=JSON.parse(localStorage.getItem('i31_iban'))||{};}catch(e){}
+  try{G.ivaUber=JSON.parse(localStorage.getItem('i31_ivauber'))||{};}catch(e){}
+  try{G.ivaCob=JSON.parse(localStorage.getItem('i31_ivacob'))||{};}catch(e){}
+  try{G.list=JSON.parse(localStorage.getItem('i31_semanas'))||[];}catch(e){}
+})();
+
+var UBER0=[
+  {uid:'09df7bf3',nome:'DANIEL SILVA',viagens:244,uBruto:929.22,uRend:929.22},
+  {uid:'abfc94e8',nome:'JULIO PAULO FERNANDES BARROS CASTRO',viagens:81,uBruto:477.66,uRend:448.46},
+  {uid:'2e966f57',nome:'ALEXANDRE BATISTA IGLESIAS',viagens:104,uBruto:446.77,uRend:438.87},
+  {uid:'7a5cb770',nome:'PEDRO MIGUEL FREITAS RODRIGUES',viagens:109,uBruto:426.83,uRend:426.83},
+  {uid:'5b4f2863',nome:'ALESSANDRO MAX CAMELO DA SILVA',viagens:79,uBruto:428.70,uRend:415.70},
+  {uid:'53a62d07',nome:'WELDYS GOMES FERREIRA',viagens:74,uBruto:361.94,uRend:357.59}
+];
+var BOLT0=[
+  {bNome:'Alessandro Silva',email:'amcs.camelo@gmail.com',tel:'351938742285',bLiq:140.46,bIVA:8.15},
+  {bNome:'Alexandre Iglesias',email:'alexandreiglesias.pt@gmail.com',tel:'351913278025',bLiq:150.69,bIVA:9.86},
+  {bNome:'Pedro Rodrigues',email:'ggoollddeenn@gmail.com',tel:'351914182523',bLiq:85.76,bIVA:5.73},
+  {bNome:'Regina Pacheco',email:'reginamanna@gmail.com',tel:'351914413757',bLiq:9.82,bIVA:0.64},
+  {bNome:'Weldys Gomes',email:'Gomesweldys2@gmail.com',tel:'351912131918',bLiq:45.11,bIVA:2.96}
+];
+
+if(!G.list.length){
+  var bmap=matchBolt(UBER0,BOLT0);
+  var drvs=buildDrivers(UBER0,bmap);
+  drvs.forEach(function(d){
+    if(d.bEmail&&!G.emails[d.uid])G.emails[d.uid]=d.bEmail;
+    if(d.bTel&&!G.wa[d.uid])G.wa[d.uid]='+'+d.bTel;
+  });
+  saveAll();
+  G.list.push({sem:'16/03/2026 a 23/03/2026',drivers:drvs,totals:buildTotals(drvs),transf:{},dt:'24/03/2026'});
+  persist();
+}
+
+function r2(n){return Math.round((n||0)*100)/100;}
+function fm(n){return Number(n||0).toLocaleString('pt-PT',{minimumFractionDigits:2,maximumFractionDigits:2})+' \u20ac';}
+function fn(n){return Number(n||0).toLocaleString('pt-PT',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function getIvaU(uid){return G.ivaUber[uid]!==undefined?G.ivaUber[uid]:G.cfg.iva;}
+function getIvaC(uid){return G.ivaCob[uid]!==undefined?G.ivaCob[uid]:0;}
+function getSlot(uid){return G.slots[uid]!==undefined?G.slots[uid]:G.cfg.slot;}
+function getAlug(uid){return G.aluguer[uid]!==undefined?G.aluguer[uid]:0;}
+
+function calcD(d){
+  var ivaPct=getIvaU(d.uid),ivaF=ivaPct/100;
+  var uIVA=r2((d.uRend||0)/(1+ivaF)*ivaF);
+  var uLiq=r2((d.uRend||0)-uIVA);
+  var bLiq=r2(d.bLiq||0),bIVA=r2(d.bIVA||0);
+  var rendLiq=r2(uLiq+bLiq);
+  var ivaCobPct=getIvaC(d.uid);
+  var ivaCobEur=ivaCobPct>0?r2(rendLiq*ivaCobPct/100):0;
+  var slot=r2(getSlot(d.uid)),alug=r2(getAlug(d.uid));
+  var vv=r2(d.vv||0),carr=r2(d.carr||0);
+  var totalDesp=r2(slot+alug+vv+carr);
+  var total=r2(rendLiq+ivaCobEur-totalDesp);
+  return Object.assign({},d,{ivaPct:ivaPct,uIVA:uIVA,uLiq:uLiq,bLiq:bLiq,bIVA:bIVA,rendLiq:rendLiq,ivaCobPct:ivaCobPct,ivaCobEur:ivaCobEur,slot:slot,alug:alug,vv:vv,carr:carr,totalDesp:totalDesp,total:total});
+}
+
+function matchBolt(uArr,bArr){
+  var map={};
+  bArr.forEach(function(b){
+    var bF=b.bNome.split(' ')[0].toLowerCase(),match=null;
+    for(var i=0;i<uArr.length;i++){
+      var parts=uArr[i].nome.toLowerCase().split(' ');
+      for(var j=0;j<parts.length;j++){if(parts[j].indexOf(bF)>=0||bF.indexOf(parts[j])>=0){match=uArr[i];break;}}
+      if(match)break;
+    }
+    if(match){map[match.uid]={bLiq:b.bLiq,bIVA:b.bIVA,bEmail:b.email,bTel:b.tel,bNome:b.bNome};}
+    else{var uid='bolt-'+b.bNome.replace(/\s/g,'-').toLowerCase();map[uid]={bLiq:b.bLiq,bIVA:b.bIVA,bEmail:b.email,bTel:b.tel,bNome:b.bNome,bOnly:true};}
+  });
+  return map;
+}
+
+function buildDrivers(uArr,bmap){
+  var drvs=[];
+  uArr.forEach(function(u){var b=bmap[u.uid]||{};drvs.push(calcD(Object.assign({},u,b,{vv:0,carr:0})));});
+  Object.keys(bmap).forEach(function(uid){var b=bmap[uid];if(b.bOnly)drvs.push(calcD({uid:uid,nome:b.bNome,viagens:0,uBruto:0,uRend:0,bLiq:b.bLiq,bIVA:b.bIVA,bEmail:b.bEmail,bTel:b.bTel,vv:0,carr:0}));});
+  return drvs.sort(function(a,b){return b.total-a.total;});
+}
+
+function buildTotals(drvs){
+  return{uBruto:r2(drvs.reduce(function(s,d){return s+(d.uBruto||0);},0)),uRend:r2(drvs.reduce(function(s,d){return s+(d.uRend||0);},0)),uIVA:r2(drvs.reduce(function(s,d){return s+(d.uIVA||0);},0)),bLiq:r2(drvs.reduce(function(s,d){return s+(d.bLiq||0);},0)),bIVA:r2(drvs.reduce(function(s,d){return s+(d.bIVA||0);},0)),ivaCob:r2(drvs.reduce(function(s,d){return s+(d.ivaCobEur||0);},0)),slot:r2(drvs.reduce(function(s,d){return s+(d.slot||0);},0)),alug:r2(drvs.reduce(function(s,d){return s+(d.alug||0);},0)),vv:r2(drvs.reduce(function(s,d){return s+(d.vv||0);},0)),carr:r2(drvs.reduce(function(s,d){return s+(d.carr||0);},0)),desp:r2(drvs.reduce(function(s,d){return s+(d.totalDesp||0);},0)),rendLiq:r2(drvs.reduce(function(s,d){return s+(d.rendLiq||0);},0)),total:r2(drvs.reduce(function(s,d){return s+(d.total||0);},0)),viagens:drvs.reduce(function(s,d){return s+(d.viagens||0);},0)};
+}
+
+function persist(){try{localStorage.setItem('i31_semanas',JSON.stringify(G.list));}catch(e){}}
+function saveAll(){
+  try{localStorage.setItem('i31_emails',JSON.stringify(G.emails));}catch(e){}
+  try{localStorage.setItem('i31_wa',JSON.stringify(G.wa));}catch(e){}
+  try{localStorage.setItem('i31_iban',JSON.stringify(G.iban));}catch(e){}
+  try{localStorage.setItem('i31_slots',JSON.stringify(G.slots));}catch(e){}
+  try{localStorage.setItem('i31_aluguer',JSON.stringify(G.aluguer));}catch(e){}
+  try{localStorage.setItem('i31_ivauber',JSON.stringify(G.ivaUber));}catch(e){}
+  try{localStorage.setItem('i31_ivacob',JSON.stringify(G.ivaCob));}catch(e){}
+}
+function lastSem(){return G.list.length?G.list[G.list.length-1]:null;}
+
+function goTab(t){
+  document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('active');});
+  document.getElementById(t).classList.add('active');
+  document.getElementById('tab-'+t).classList.add('active');
+  if(t==='res')renderRes();
+  if(t==='hist')renderHist();
+  if(t==='cfg')renderCfg();
+}
+
+function upd(uid,field,val){
+  var sem=lastSem();if(!sem)return;
+  var d=null;
+  for(var i=0;i<sem.drivers.length;i++){if(sem.drivers[i].uid===uid){d=sem.drivers[i];break;}}
+  if(!d)return;
+  val=parseFloat(val)||0;
+  if(field==='ivaPct'){G.ivaUber[uid]=r2(val);try{localStorage.setItem('i31_ivauber',JSON.stringify(G.ivaUber));}catch(e){}}
+  else if(field==='ivaCob'){G.ivaCob[uid]=val;try{localStorage.setItem('i31_ivacob',JSON.stringify(G.ivaCob));}catch(e){}}
+  else if(field==='alug'){G.aluguer[uid]=r2(val);try{localStorage.setItem('i31_aluguer',JSON.stringify(G.aluguer));}catch(e){};d.alug=r2(val);}
+  else{d[field]=r2(val);}
+  var nd=calcD(d);Object.assign(d,nd);
+  var t=buildTotals(sem.drivers);sem.totals=t;persist();
+  function sc(id,v,color){var el=document.getElementById(id);if(el){el.textContent=v;if(color)el.style.color=color;}}
+  sc('td-uiva-'+uid,fm(d.uIVA));
+  sc('td-ivc-'+uid,d.ivaCobEur>0?'+'+fm(d.ivaCobEur):'—','#aeea00');
+  sc('td-desp-'+uid,fm(d.totalDesp));
+  sc('td-rl-'+uid,fm(d.rendLiq));
+  sc('td-tot-'+uid,fm(d.total),d.total<0?'#ff6b6b':'#FFD600');
+  var inpIva=document.getElementById('inp-iva-'+uid);
+  if(inpIva)inpIva.className='ii'+(G.ivaUber[uid]!==undefined&&G.ivaUber[uid]!==G.cfg.iva?' cx':'');
+  ['alug','vv','carr'].forEach(function(f){var el=document.getElementById('inp-'+f+'-'+uid);if(el)el.className='di'+(d[f]>0?' hv':'');});
+  document.getElementById('m-ivc').textContent=fm(t.ivaCob);
+  document.getElementById('m-desp').textContent=fm(t.desp);
+  document.getElementById('m-tot').textContent=fm(t.total);
+  renderFoot(t);
+  var tMot=document.getElementById('t-mot');
+  if(tMot&&tMot.value===uid)document.getElementById('t-val').value=d.total.toFixed(2);
+}
+
+function renderFoot(t){
+  var el=document.getElementById('r-foot');if(!el)return;
+  el.innerHTML='<tr><td>TOTAL</td><td>'+fm(t.uBruto)+'</td><td></td><td style="color:#ff9800">-'+fm(t.uIVA)+'</td><td style="color:#34d186">'+fm(t.bLiq)+'</td><td style="color:#aaa">±'+fm(t.bIVA)+'</td><td></td><td style="color:#aeea00;font-weight:800">+'+fm(t.ivaCob)+'</td><td style="color:#ff6b6b">-'+fm(t.slot)+'</td><td style="color:#ff6b6b">-'+fm(t.alug)+'</td><td style="color:#ff6b6b">-'+fm(t.vv)+'</td><td style="color:#ff6b6b">-'+fm(t.carr)+'</td><td style="color:#ff6b6b">-'+fm(t.desp)+'</td><td>'+fm(t.rendLiq)+'</td><td>'+fm(t.total)+'</td><td></td><td></td></tr>';
+}
+
+function renderRes(){
+  var sem=lastSem();
+  if(!sem){document.getElementById('res-empty').style.display='block';document.getElementById('res-body').style.display='none';return;}
+  document.getElementById('res-empty').style.display='none';document.getElementById('res-body').style.display='block';
+  var t=sem.totals;
+  var totalPago=r2(Object.values(sem.transf).reduce(function(s,v){return s+(v.val||0);},0));
+  var pagoN=sem.drivers.filter(function(d){var tr=sem.transf[d.uid];return tr&&tr.val>=d.total;}).length;
+  document.getElementById('m-sem').textContent=sem.sem;document.getElementById('m-sem2').textContent=sem.sem;
+  document.getElementById('m-ub').textContent=fm(t.uBruto);document.getElementById('m-bl').textContent=fm(t.bLiq);
+  document.getElementById('m-ivc').textContent=fm(t.ivaCob);document.getElementById('m-desp').textContent=fm(t.desp);
+  document.getElementById('m-tot').textContent=fm(t.total);
+  var pct=Math.round(pagoN/sem.drivers.length*100);
+  document.getElementById('p-bar').style.width=pct+'%';document.getElementById('p-lbl').textContent=pct+'%';
+  var sel=document.getElementById('t-mot');sel.innerHTML='<option value="">-- selecionar --</option>';
+  var tb='';
+  sem.drivers.forEach(function(d){
+    var tr=sem.transf[d.uid],pago=tr&&tr.val>=d.total;
+    var ivaPct=d.ivaPct||G.cfg.iva,isCx=G.ivaUber[d.uid]!==undefined&&G.ivaUber[d.uid]!==G.cfg.iva;
+    tb+='<tr><td><b style="font-size:11px">'+d.nome+'</b>'+(d.uBruto>0?'<span class="pt-u">U</span>':'')+(d.bLiq>0?'<span class="pt-b">B</span>':'')+'</td>';
+    tb+='<td>'+fm(d.uBruto)+'</td>';
+    tb+='<td><div style="display:flex;align-items:center;gap:2px"><input type="number" id="inp-iva-'+d.uid+'" class="ii'+(isCx?' cx':'')+'" value="'+ivaPct+'" min="0" max="100" step="0.1" oninput="upd(\''+d.uid+'\',\'ivaPct\',this.value)"><span style="font-size:9px;color:#888">%</span></div></td>';
+    tb+='<td style="color:#ff9800" id="td-uiva-'+d.uid+'">-'+fm(d.uIVA)+'</td>';
+    tb+='<td style="color:#34d186">'+fm(d.bLiq)+'</td>';
+    tb+='<td style="color:#aaa;font-size:10px">±'+fm(d.bIVA)+'</td>';
+    tb+='<td><select class="si" onchange="upd(\''+d.uid+'\',\'ivaCob\',this.value)"><option value="0"'+(d.ivaCobPct===0?' selected':'')+'>Isento</option><option value="6"'+(d.ivaCobPct===6?' selected':'')+'>6%</option><option value="23"'+(d.ivaCobPct===23?' selected':'')+'>23%</option></select></td>';
+    tb+='<td style="color:#aeea00;font-weight:700" id="td-ivc-'+d.uid+'">'+(d.ivaCobEur>0?'+'+fm(d.ivaCobEur):'—')+'</td>';
+    tb+='<td style="color:#ff6b6b">-'+fm(d.slot)+'</td>';
+    tb+='<td><input type="number" id="inp-alug-'+d.uid+'" class="di'+(d.alug>0?' hv':'')+'" value="'+(d.alug>0?d.alug:'')+'" placeholder="0,00" min="0" step="0.01" oninput="upd(\''+d.uid+'\',\'alug\',this.value)"></td>';
+    tb+='<td><input type="number" id="inp-vv-'+d.uid+'" class="di'+(d.vv>0?' hv':'')+'" value="'+(d.vv>0?d.vv:'')+'" placeholder="0,00" min="0" step="0.01" oninput="upd(\''+d.uid+'\',\'vv\',this.value)"></td>';
+    tb+='<td><input type="number" id="inp-carr-'+d.uid+'" class="di'+(d.carr>0?' hv':'')+'" value="'+(d.carr>0?d.carr:'')+'" placeholder="0,00" min="0" step="0.01" oninput="upd(\''+d.uid+'\',\'carr\',this.value)"></td>';
+    tb+='<td style="color:#ff6b6b;font-weight:700" id="td-desp-'+d.uid+'">-'+fm(d.totalDesp)+'</td>';
+    tb+='<td style="color:#aaa" id="td-rl-'+d.uid+'">'+fm(d.rendLiq)+'</td>';
+    tb+='<td style="font-weight:800;color:'+(d.total<0?'#ff6b6b':'#FFD600')+'" id="td-tot-'+d.uid+'">'+fm(d.total)+'</td>';
+    tb+='<td><span class="badge '+(pago?'bok':'bpend')+'">'+(pago?'✅':'⏳')+'</span></td>';
+    tb+='<td style="white-space:nowrap"><button class="bsm bsmy" style="margin-right:3px" onclick="openSend(\''+d.uid+'\')">📤</button>'+(pago?'<button class="bsm bsmo" onclick="verDet(\''+d.uid+'\')">Ver</button>':'<button class="bsm bsmo" onclick="prePag(\''+d.uid+'\')">Pagar</button>')+'</td></tr>';
+    if(!pago)sel.innerHTML+='<option value="'+d.uid+'">'+d.nome+' — '+fm(d.total)+'</option>';
+  });
+  document.getElementById('r-body').innerHTML=tb;renderFoot(t);
+}
+
+function prePag(uid){var sem=lastSem();if(!sem)return;var d=sem.drivers.filter(function(x){return x.uid===uid;})[0];document.getElementById('t-mot').value=uid;document.getElementById('t-val').value=d.total.toFixed(2);}
+
+function regTransf(){
+  var sem=lastSem();if(!sem)return;
+  var uid=document.getElementById('t-mot').value,val=parseFloat(document.getElementById('t-val').value)||0,ref=document.getElementById('t-ref').value.trim();
+  if(!uid){alert('Seleciona um motorista.');return;}if(val<=0){alert('Introduz um valor.');return;}
+  sem.transf[uid]={val:val,ref:ref,data:new Date().toLocaleDateString('pt-PT')};persist();
+  document.getElementById('t-mot').value='';document.getElementById('t-val').value='';document.getElementById('t-ref').value='';
+  var d=sem.drivers.filter(function(x){return x.uid===uid;})[0];
+  var msg=document.getElementById('t-msg');msg.textContent='✅ '+fm(val)+' para '+d.nome.split(' ')[0]+'!';
+  setTimeout(function(){msg.textContent='';},3000);renderRes();
+}
+
+function verDet(uid){
+  var sem=lastSem();if(!sem)return;
+  var d=sem.drivers.filter(function(x){return x.uid===uid;})[0],tr=sem.transf[uid];
+  alert(d.nome+'\n\nUber bruto: '+fm(d.uBruto)+'\nIVA Uber ('+d.ivaPct+'%): -'+fm(d.uIVA)+'\nBolt: '+fm(d.bLiq)+'\nRend.Liq.: '+fm(d.rendLiq)+'\nIVA cobrar ('+d.ivaCobPct+'%): +'+fm(d.ivaCobEur)+'\n\nDespesas: -'+fm(d.totalDesp)+'\nA receber: '+fm(d.total)+'\n\nTransferido: '+(tr?fm(tr.val):'—')+'\nRef: '+(tr&&tr.ref?tr.ref:'—'));
+}
+
+function pagarTodos(){var sem=lastSem();if(!sem)return;if(!confirm('Marcar todos como pagos?'))return;sem.drivers.forEach(function(d){if(!sem.transf[d.uid])sem.transf[d.uid]={val:d.total,ref:'',data:new Date().toLocaleDateString('pt-PT')};});persist();renderRes();}
+
+// UPLOAD
+function dg(e,p,on){e.preventDefault();document.getElementById('dz-'+p).classList[on?'add':'remove']('drag');}
+function dp(e,p){e.preventDefault();document.getElementById('dz-'+p).classList.remove('drag');if(e.dataTransfer.files[0])lf(e.dataTransfer.files[0],p);}
+function lf(file,p){if(!file||!file.name.endsWith('.csv')){alert('Seleciona um .csv');return;}var r=new FileReader();r.onload=function(e){pFile(e.target.result,file.name,p);};r.readAsText(file,'utf-8');}
+
+function splitL(line){var v=[],c='',q=false;for(var i=0;i<line.length;i++){var ch=line[i];if(ch==='"'){q=!q;}else if(ch===','&&!q){v.push(c.replace(/^"|"$/g,''));c='';}else c+=ch;}v.push(c.replace(/^"|"$/g,''));return v;}
+
+function parseCSV(text){text=text.replace(/^\uFEFF/,'');var lines=text.split('\n').filter(function(l){return l.trim();});var headers=splitL(lines[0]).map(function(h){return h.trim();});return lines.slice(1).map(function(l){var v=splitL(l);var o={};headers.forEach(function(h,i){o[h]=(v[i]||'').trim();});return o;}).filter(function(r){return Object.values(r).some(function(v){return v;});});}
+
+function weekFn(fn){var m=fn.match(/(\d{8})-(\d{8})/);if(m){var a=m[1],b=m[2];return a.slice(6,8)+'/'+a.slice(4,6)+'/'+a.slice(0,4)+' a '+b.slice(6,8)+'/'+b.slice(4,6)+'/'+b.slice(0,4);}m=fn.match(/(\d{4})W(\d{1,2})/);if(m)return 'Semana '+m[2]+' de '+m[1];return 'Semana desconhecida';}
+
+var PND={uber:null,bolt:null,merged:null};
+
+function pFile(text,fname,plat){
+  try{
+    var rows=parseCSV(text);if(!rows.length){alert('Ficheiro vazio.');return;}
+    if(plat==='uber'){
+      var by={};rows.forEach(function(r){var uid=r['UUID do motorista'];if(!uid||uid.length<5)return;var nome=((r['Nome pr\u00f3prio do motorista']||'')+' '+(r['Apelido do motorista']||'')).trim();if(!by[uid])by[uid]={uid:uid,nome:nome,viagens:0,uBruto:0,uRend:0};by[uid].viagens++;by[uid].uBruto=r2(by[uid].uBruto+(parseFloat(r['Pago a si'])||0));by[uid].uRend=r2(by[uid].uRend+(parseFloat(r['Pago a si : Os seus rendimentos'])||0));});
+      PND.uber={data:Object.values(by),sem:weekFn(fname)};
+      document.getElementById('ut').textContent='✅ Uber: '+rows.length+' viagens';document.getElementById('us').textContent=Object.keys(by).length+' motoristas';
+      document.getElementById('mu').innerHTML='<span style="color:#4caf50;font-weight:700">✅ '+Object.keys(by).length+' motoristas Uber</span>';
+    } else {
+      var bArr=rows.map(function(r){return{bNome:r['Motorista']||'',email:r['Email']||'',tel:(r['Telef\u00f3vel']||r['Telef\u00f3mo\u0301vel']||r['Telem\u00f3vel']||'').replace(/\D/g,''),bLiq:parseFloat(r['Ganhos l\u00edquidos|\u20ac'])||0,bIVA:parseFloat(r['IVA sobre os ganhos brutos (pagamentos na app)|\u20ac'])||0};}).filter(function(r){return r.bNome;});
+      PND.bolt={data:bArr,sem:weekFn(fname)};
+      document.getElementById('bt').textContent='✅ Bolt: '+bArr.length+' motoristas';document.getElementById('bs').textContent='Semana: '+weekFn(fname);
+      document.getElementById('mb').innerHTML='<span style="color:#34d186;font-weight:700">✅ '+bArr.length+' motoristas Bolt</span>';
+    }
+    if(PND.uber||PND.bolt)showPV();
+  }catch(err){document.getElementById('m'+plat[0]).innerHTML='<span style="color:#ff6b6b">Erro: '+err.message+'</span>';}
+}
+
+function showPV(){
+  var uArr=PND.uber?PND.uber.data:[],bArr=PND.bolt?PND.bolt.data:[],sem=(PND.uber||PND.bolt||{}).sem||'';
+  var bmap=matchBolt(uArr,bArr),drvs=buildDrivers(uArr,bmap),t=buildTotals(drvs);
+  PND.merged={sem:sem,drivers:drvs,totals:t};
+  document.getElementById('pv-sem').textContent=sem;document.getElementById('pv-n').textContent=drvs.length;
+  document.getElementById('pv-u').textContent=fn(t.uBruto)+' \u20ac';document.getElementById('pv-b').textContent=fn(t.bLiq)+' \u20ac';document.getElementById('pv-t').textContent=fn(t.total)+' \u20ac';
+  var tb='';drvs.forEach(function(d){tb+='<tr><td><b>'+d.nome+'</b></td><td>'+fm(d.uBruto)+'</td><td style="color:#34d186">'+fm(d.bLiq)+'</td><td style="color:#ff9800">-'+fm(d.uIVA)+'</td><td style="color:#ff6b6b">-'+fm(d.slot)+'</td><td style="color:#FFD600;font-weight:800">'+fm(d.total)+'</td></tr>';});
+  document.getElementById('pv-body').innerHTML=tb;
+  document.getElementById('pv-foot').innerHTML='<tr><td>TOTAL</td><td>'+fm(t.uBruto)+'</td><td style="color:#34d186">'+fm(t.bLiq)+'</td><td style="color:#ff9800">-'+fm(t.uIVA)+'</td><td style="color:#ff6b6b">-'+fm(t.slot)+'</td><td>'+fm(t.total)+'</td></tr>';
+  document.getElementById('pv-card').style.display='block';
+}
+
+function confirmar(){
+  if(!PND.merged)return;
+  var m=PND.merged;
+  m.drivers.forEach(function(d){if(d.bEmail&&!G.emails[d.uid])G.emails[d.uid]=d.bEmail;if(d.bTel&&!G.wa[d.uid])G.wa[d.uid]='+'+d.bTel;});
+  saveAll();
+  G.list.push({sem:m.sem,drivers:m.drivers,totals:m.totals,transf:{},dt:new Date().toLocaleDateString('pt-PT')});
+  persist();PND={uber:null,bolt:null,merged:null};
+  document.getElementById('pv-card').style.display='none';
+  document.getElementById('ut').textContent='\u2B06 Arrasta o CSV da Uber';document.getElementById('us').textContent='Uber Fleet \u2192 Pagamentos \u2192 Por viagem';
+  document.getElementById('bt').textContent='\u2B06 Arrasta o CSV da Bolt';document.getElementById('bs').textContent='Bolt Driver Portal \u2192 Relat\u00f3rio de ganhos';
+  document.getElementById('mu').innerHTML='';document.getElementById('mb').innerHTML='';
+  goTab('res');
+}
+function cancelar(){document.getElementById('pv-card').style.display='none';}
+
+// SEND MODAL
+function openSend(uid){
+  var sem=lastSem();if(!sem)return;
+  var d=sem.drivers.filter(function(x){return x.uid===uid;})[0],tr=sem.transf[uid];
+  G.activeSend={d:d,sem:sem.sem,uid:uid};
+  document.getElementById('sn-nome').textContent=d.nome.split(' ')[0];
+  document.getElementById('sn-em').value=G.emails[uid]||'';
+  document.getElementById('sn-wa').value=G.wa[uid]||'';
+  document.getElementById('sn-ib').value=G.iban[uid]||'';
+  var rec='<div style="font-size:13px;font-weight:800;color:#FFD600;margin-bottom:8px">'+d.nome+'</div>'+
+    '<div style="font-size:11px;color:#666;margin-bottom:10px">Semana '+sem.sem+'</div>'+
+    (d.uBruto>0?'<div class="rw"><span>Uber bruto</span><b>'+fm(d.uBruto)+'</b></div>':'')+
+    (d.uBruto>0?'<div class="rw"><span style="color:#ff9800">IVA Uber ('+d.ivaPct+'%)</span><b style="color:#ff9800">-'+fm(d.uIVA)+'</b></div>':'')+
+    (d.bLiq>0?'<div class="rw"><span style="color:#34d186">Bolt l\u00edquido</span><b style="color:#34d186">'+fm(d.bLiq)+'</b></div>':'')+
+    '<div class="rw"><span>Rendimentos l\u00edq.</span><b>'+fm(d.rendLiq)+'</b></div>'+
+    (d.ivaCobEur>0?'<div class="rw"><span style="color:#aeea00">IVA a cobrar ('+d.ivaCobPct+'%)</span><b style="color:#aeea00">+'+fm(d.ivaCobEur)+'</b></div>':'')+
+    '<div class="rw"><span style="color:#ff6b6b">Slot</span><b style="color:#ff6b6b">-'+fm(d.slot)+'</b></div>'+
+    (d.alug>0?'<div class="rw"><span style="color:#ff6b6b">Aluguer</span><b style="color:#ff6b6b">-'+fm(d.alug)+'</b></div>':'')+
+    (d.vv>0?'<div class="rw"><span style="color:#ff6b6b">Via Verde</span><b style="color:#ff6b6b">-'+fm(d.vv)+'</b></div>':'')+
+    (d.carr>0?'<div class="rw"><span style="color:#ff6b6b">Carregamentos</span><b style="color:#ff6b6b">-'+fm(d.carr)+'</b></div>':'')+
+    '<div class="rt"><span>A receber</span><span style="color:#FFD600">'+fm(d.total)+'</span></div>'+
+    (tr?'<div style="margin-top:8px;padding:7px 10px;background:#1a3a1a;border-radius:5px;font-size:11px;color:#4caf50">\u2705 Transfer\u00eancia \u2014 '+fm(tr.val)+(tr.ref?' \u00b7 '+tr.ref:'')+'</div>':'');
+  document.getElementById('sn-rec').innerHTML=rec;
+  document.getElementById('ov').style.display='flex';
+  document.getElementById('sn-msg').textContent='';
+}
+function closeSend(){document.getElementById('ov').style.display='none';G.activeSend=null;}
+
+function saveContact(){
+  if(!G.activeSend)return;
+  var uid=G.activeSend.uid;
+  var em=document.getElementById('sn-em').value.trim(),wa=document.getElementById('sn-wa').value.trim(),ib=document.getElementById('sn-ib').value.trim();
+  if(em)G.emails[uid]=em;if(wa)G.wa[uid]=wa;if(ib)G.iban[uid]=ib;
+  saveAll();var msg=document.getElementById('sn-msg');msg.textContent='\u2705 Guardado!';setTimeout(function(){msg.textContent='';},2000);
+}
+
+function buildTextMsg(d,sem,uid){
+  var tr=lastSem()?lastSem().transf[uid]:null,iban=G.iban[uid]||'';
+  var sep='━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━';
+  var L=[];
+  L.push('Olá '+d.nome.split(' ')[0]+',');L.push('');
+  L.push('Segue o resumo do teu pagamento referente à semana '+sem+'.');L.push('');
+  L.push(sep);
+  if(d.uBruto>0){L.push('Faturação Uber bruta:    '+fm(d.uBruto));L.push('IVA Uber ('+d.ivaPct+'%):          -'+fm(d.uIVA));}
+  if(d.bLiq>0)L.push('Bolt líquido:            '+fm(d.bLiq));
+  L.push('Rendimentos líq.:        '+fm(d.rendLiq));
+  if(d.ivaCobEur>0)L.push('IVA a cobrar ('+d.ivaCobPct+'%):     +'+fm(d.ivaCobEur));
+  L.push('');L.push('DESPESAS:');
+  L.push('  Slot semanal:          -'+fm(d.slot));
+  if(d.alug>0)L.push('  Aluguer viatura:       -'+fm(d.alug));
+  if(d.vv>0)L.push('  Via Verde:             -'+fm(d.vv));
+  if(d.carr>0)L.push('  Carregamentos:         -'+fm(d.carr));
+  L.push(sep);L.push('TOTAL A RECEBER:         '+fm(d.total));L.push(sep);
+  if(iban){L.push('');L.push('IBAN: '+iban);}
+  if(tr){L.push('');L.push('✅ Transferência confirmada: '+fm(tr.val)+(tr.ref?' | Ref: '+tr.ref:''));}
+  L.push('');L.push('Qualquer questão, não hesites em contactar.');L.push('');
+  L.push('Cumprimentos,');L.push('Instituto 31, Lda | NIF 515 285 471');L.push('');
+  L.push('Sem retenção de IRS — Art.101.º, n.º1 do CIRS');
+  L.push('IVA — regime de isenção (Art.º 53.º)');
+  return L.join('\n');
+}
+
+function buildPDFHTML(d,sem,uid){
+  var tr=lastSem()?lastSem().transf[uid]:null,iban=G.iban[uid]||'';
+  var rows='';
+  if(d.uBruto>0){rows+='<tr style="border-bottom:1px solid #eee"><td style="padding:9px 0;color:#555">Faturação Uber bruta</td><td style="text-align:right;font-weight:700;padding:9px 0">'+fm(d.uBruto)+'</td></tr>';rows+='<tr style="border-bottom:1px solid #eee"><td style="padding:9px 0 9px 14px;color:#e65100">IVA Uber ('+d.ivaPct+'%)</td><td style="text-align:right;color:#c62828;padding:9px 0">-'+fm(d.uIVA)+'</td></tr>';}
+  if(d.bLiq>0)rows+='<tr style="border-bottom:1px solid #eee"><td style="padding:9px 0;color:#2e7d32">Bolt líquido</td><td style="text-align:right;font-weight:700;color:#2e7d32;padding:9px 0">'+fm(d.bLiq)+'</td></tr>';
+  rows+='<tr style="border-bottom:2px solid #FFD600"><td style="padding:9px 0;font-weight:700">Rendimentos líquidos</td><td style="text-align:right;font-weight:700;padding:9px 0">'+fm(d.rendLiq)+'</td></tr>';
+  if(d.ivaCobEur>0)rows+='<tr style="border-bottom:1px solid #eee"><td style="padding:9px 0;color:#388e3c">IVA a cobrar ('+d.ivaCobPct+'%)</td><td style="text-align:right;color:#388e3c;font-weight:700;padding:9px 0">+'+fm(d.ivaCobEur)+'</td></tr>';
+  rows+='<tr style="border-bottom:1px solid #eee"><td style="padding:9px 0 9px 14px;color:#555">Slot semanal</td><td style="text-align:right;color:#c62828;padding:9px 0">-'+fm(d.slot)+'</td></tr>';
+  if(d.alug>0)rows+='<tr style="border-bottom:1px solid #eee"><td style="padding:9px 0 9px 14px;color:#555">Aluguer viatura</td><td style="text-align:right;color:#c62828;padding:9px 0">-'+fm(d.alug)+'</td></tr>';
+  if(d.vv>0)rows+='<tr style="border-bottom:1px solid #eee"><td style="padding:9px 0 9px 14px;color:#555">Via Verde</td><td style="text-align:right;color:#c62828;padding:9px 0">-'+fm(d.vv)+'</td></tr>';
+  if(d.carr>0)rows+='<tr style="border-bottom:1px solid #eee"><td style="padding:9px 0 9px 14px;color:#555">Carregamentos</td><td style="text-align:right;color:#c62828;padding:9px 0">-'+fm(d.carr)+'</td></tr>';
+  rows+='<tr><td style="padding:9px 0 9px 14px;color:#555">Total despesas</td><td style="text-align:right;color:#c62828;font-weight:700;padding:9px 0">-'+fm(d.totalDesp)+'</td></tr>';
+  return '<div style="font-family:Arial,sans-serif;padding:36px;max-width:640px;margin:0 auto;background:#fff">'
+    +'<div style="background:#000;padding:20px 28px;border-radius:8px 8px 0 0;display:flex;justify-content:space-between;align-items:center">'
+      +'<div><div style="color:#FFD600;font-size:22px;font-weight:900">I31 TVDE</div><div style="color:#666;font-size:11px;margin-top:3px">Instituto 31, Lda · NIF 515 285 471</div></div>'
+      +'<div style="text-align:right"><div style="color:#FFD600;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Recibo de Pagamento</div><div style="color:#555;font-size:11px;margin-top:3px">'+new Date().toLocaleDateString('pt-PT')+'</div></div>'
+    +'</div>'
+    +'<div style="background:#FFD600;padding:16px 28px"><div style="font-size:19px;font-weight:900;color:#000">'+d.nome+'</div><div style="font-size:12px;color:#333;margin-top:3px">Motorista TVDE · Semana '+sem+'</div></div>'
+    +'<div style="background:#f9f9f9;padding:20px 28px;border:1px solid #e0e0e0">'
+      +'<table style="width:100%;border-collapse:collapse;font-size:13px">'+rows+'</table>'
+      +'<div style="background:#000;border-radius:6px;padding:14px 18px;margin-top:16px;display:flex;justify-content:space-between;align-items:center">'
+        +'<span style="color:#FFD600;font-size:14px;font-weight:800">TOTAL A RECEBER</span>'
+        +'<span style="color:#FFD600;font-size:22px;font-weight:900">'+fm(d.total)+'</span>'
+      +'</div>'
+      +(iban?'<div style="margin-top:12px;padding:12px 16px;background:#e3f2fd;border-radius:6px;border-left:4px solid #1565C0"><p style="margin:0;font-size:12px;color:#1565C0;font-weight:700">IBAN</p><p style="margin:4px 0 0;font-family:monospace;font-size:13px;color:#0d47a1">'+iban+'</p></div>':'')+
+      (tr?'<div style="margin-top:10px;padding:12px 16px;background:#e8f5e9;border-radius:6px;border-left:4px solid #2e7d32"><p style="margin:0;font-size:12px;color:#2e7d32;font-weight:700">✅ Transferência confirmada</p><p style="margin:4px 0 0;font-size:12px;color:#388e3c">'+fm(tr.val)+(tr.ref?' · Ref: '+tr.ref:'')+(tr.data?' · '+tr.data:'')+'</p></div>':'')+
+    '</div>'
+    +'<div style="background:#000;padding:12px 28px;border-radius:0 0 8px 8px;text-align:center"><p style="margin:0;color:#555;font-size:11px">Sem retenção de IRS — Art.101.º, n.º1 do CIRS · IVA — regime de isenção (Art.º 53.º)</p></div>'
+  +'</div>';
+}
+
+function buildEmailHTML(d,sem,uid){
+  var tr=lastSem()?lastSem().transf[uid]:null,iban=G.iban[uid]||'';
+  var nome1=d.nome.split(' ')[0];
+  var rows='';
+  if(d.uBruto>0){
+    rows+='<tr><td style="padding:10px 16px;color:#555;border-bottom:1px solid #f0f0f0">Faturação Uber bruta</td><td style="padding:10px 16px;text-align:right;font-weight:700;border-bottom:1px solid #f0f0f0">'+fm(d.uBruto)+'</td></tr>';
+    rows+='<tr><td style="padding:10px 16px;color:#e65100;border-bottom:1px solid #f0f0f0">&nbsp;&nbsp;&nbsp;IVA Uber ('+d.ivaPct+'%)</td><td style="padding:10px 16px;text-align:right;color:#c62828;border-bottom:1px solid #f0f0f0">-'+fm(d.uIVA)+'</td></tr>';
+  }
+  if(d.bLiq>0)rows+='<tr><td style="padding:10px 16px;color:#2e7d32;border-bottom:1px solid #f0f0f0">Bolt líquido</td><td style="padding:10px 16px;text-align:right;font-weight:700;color:#2e7d32;border-bottom:1px solid #f0f0f0">'+fm(d.bLiq)+'</td></tr>';
+  rows+='<tr style="background:#fffde7"><td style="padding:10px 16px;font-weight:700;border-bottom:2px solid #FFD600">Rendimentos líquidos</td><td style="padding:10px 16px;text-align:right;font-weight:700;border-bottom:2px solid #FFD600">'+fm(d.rendLiq)+'</td></tr>';
+  if(d.ivaCobEur>0)rows+='<tr><td style="padding:10px 16px;color:#388e3c;border-bottom:1px solid #f0f0f0">IVA a cobrar ('+d.ivaCobPct+'%)</td><td style="padding:10px 16px;text-align:right;color:#388e3c;font-weight:700;border-bottom:1px solid #f0f0f0">+'+fm(d.ivaCobEur)+'</td></tr>';
+  rows+='<tr><td style="padding:10px 16px;color:#666;border-bottom:1px solid #f0f0f0">&nbsp;&nbsp;&nbsp;Slot semanal</td><td style="padding:10px 16px;text-align:right;color:#c62828;border-bottom:1px solid #f0f0f0">-'+fm(d.slot)+'</td></tr>';
+  if(d.alug>0)rows+='<tr><td style="padding:10px 16px;color:#666;border-bottom:1px solid #f0f0f0">&nbsp;&nbsp;&nbsp;Aluguer viatura</td><td style="padding:10px 16px;text-align:right;color:#c62828;border-bottom:1px solid #f0f0f0">-'+fm(d.alug)+'</td></tr>';
+  if(d.vv>0)rows+='<tr><td style="padding:10px 16px;color:#666;border-bottom:1px solid #f0f0f0">&nbsp;&nbsp;&nbsp;Via Verde</td><td style="padding:10px 16px;text-align:right;color:#c62828;border-bottom:1px solid #f0f0f0">-'+fm(d.vv)+'</td></tr>';
+  if(d.carr>0)rows+='<tr><td style="padding:10px 16px;color:#666;border-bottom:1px solid #f0f0f0">&nbsp;&nbsp;&nbsp;Carregamentos</td><td style="padding:10px 16px;text-align:right;color:#c62828;border-bottom:1px solid #f0f0f0">-'+fm(d.carr)+'</td></tr>';
+  var ibanBlock=iban?'<div style="margin:16px 0;padding:14px 20px;background:#e3f2fd;border-radius:8px;border-left:4px solid #1565C0"><p style="margin:0;font-size:13px;color:#1565C0;font-weight:700">IBAN para transferência</p><p style="margin:4px 0 0;font-family:monospace;font-size:14px;color:#0d47a1;letter-spacing:1px">'+iban+'</p></div>':'';
+  var transfBlock=tr?'<div style="margin:10px 0 0;padding:14px 20px;background:#e8f5e9;border-radius:8px;border-left:4px solid #2e7d32"><p style="margin:0;font-size:13px;color:#2e7d32;font-weight:700">✅ Transferência confirmada</p><p style="margin:4px 0 0;font-size:13px;color:#388e3c">Valor: <b>'+fm(tr.val)+'</b>'+(tr.ref?' · Ref: <b>'+tr.ref+'</b>':'')+(tr.data?' · '+tr.data:'')+'</p></div>':'';
+  return '<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:30px 0;font-family:Arial,sans-serif">'
+    +'<tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%">'
+    +'<tr><td style="background:#000000;padding:22px 32px;border-radius:10px 10px 0 0">'
+      +'<table width="100%" cellpadding="0" cellspacing="0"><tr>'
+        +'<td><div style="color:#FFD600;font-size:22px;font-weight:900">I31 TVDE</div><div style="color:#666;font-size:11px;margin-top:3px">Instituto 31, Lda · NIF 515 285 471</div></td>'
+        +'<td align="right"><div style="color:#FFD600;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Recibo de Pagamento</div><div style="color:#555;font-size:11px;margin-top:3px">'+new Date().toLocaleDateString('pt-PT')+'</div></td>'
+      +'</tr></table></td></tr>'
+    +'<tr><td style="background:#FFD600;padding:18px 32px">'
+      +'<div style="font-size:20px;font-weight:900;color:#000">'+d.nome+'</div>'
+      +'<div style="font-size:13px;color:#333;margin-top:3px">Motorista TVDE · Semana '+sem+'</div>'
+    +'</td></tr>'
+    +'<tr><td style="background:#ffffff;padding:24px 32px 16px">'
+      +'<p style="margin:0;font-size:14px;color:#333;line-height:1.7">Olá <b>'+nome1+'</b>,</p>'
+      +'<p style="margin:10px 0 0;font-size:14px;color:#555;line-height:1.7">Segue o resumo do teu pagamento referente à semana <b>'+sem+'</b>.</p>'
+    +'</td></tr>'
+    +'<tr><td style="background:#ffffff;padding:0 32px 16px">'
+      +'<table width="100%" cellpadding="0" cellspacing="0" style="border-radius:8px;overflow:hidden;border:1px solid #e0e0e0;font-size:14px">'
+        +'<tr style="background:#f5f5f5"><td style="padding:10px 16px;font-weight:700;color:#333;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid #e0e0e0">Descrição</td>'
+        +'<td style="padding:10px 16px;text-align:right;font-weight:700;color:#333;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid #e0e0e0">Valor</td></tr>'
+        +rows
+        +'<tr style="background:#000000"><td style="padding:14px 16px;color:#FFD600;font-weight:900;font-size:15px">TOTAL A RECEBER</td>'
+        +'<td style="padding:14px 16px;text-align:right;color:#FFD600;font-weight:900;font-size:18px">'+fm(d.total)+'</td></tr>'
+      +'</table>'
+    +'</td></tr>'
+    +'<tr><td style="background:#ffffff;padding:0 32px 24px">'+ibanBlock+transfBlock
+      +'<div style="border-top:1px solid #f0f0f0;margin-top:20px;padding-top:14px">'
+        +'<p style="margin:0;font-size:12px;color:#555;line-height:1.7">Qualquer questão, não hesites em contactar.</p>'
+        +'<p style="margin:10px 0 0;font-size:11px;color:#aaa;line-height:1.6">Sem retenção de IRS — Art.101.º, n.º1 do CIRS · IVA — regime de isenção (Art.º 53.º)</p>'
+      +'</div></td></tr>'
+    +'<tr><td style="background:#111111;padding:16px 32px;border-radius:0 0 10px 10px;text-align:center">'
+      +'<p style="margin:0;color:#555;font-size:12px">Instituto 31, Lda · NIF 515 285 471</p>'
+      +'<p style="margin:5px 0 0;color:#333;font-size:11px">Este é um recibo automático gerado pelo sistema TVDE I31.</p>'
+    +'</td></tr>'
+    +'</table></td></tr></table>';
+}
+
+// ── GMAIL API ──────────────────────────────────────────────────────────────
+var GMAIL={
+  CLIENT_ID:'',  // Set by user in config
+  tokenClient:null,
+  accessToken:null,
+  authed:false
+};
+
+function initGmailAPI(){
+  var cid=localStorage.getItem('i31_gcid')||'';
+  if(!cid)return;
+  GMAIL.CLIENT_ID=cid;
+  google.accounts.id.initialize({client_id:cid});
+  GMAIL.tokenClient=google.accounts.oauth2.initTokenClient({
+    client_id:cid,
+    scope:'https://www.googleapis.com/auth/gmail.send',
+    callback:function(resp){
+      if(resp.error)return;
+      GMAIL.accessToken=resp.access_token;
+      GMAIL.authed=true;
+      updateAuthUI();
+    }
+  });
+  updateAuthUI();
+}
+
+function updateAuthUI(){
+  var bar=document.getElementById('gauth-bar');
+  var dot=document.getElementById('gauth-dot');
+  var txt=document.getElementById('gauth-txt');
+  var btn=document.getElementById('gauth-btn');
+  var lbl=document.getElementById('send-gmail-lbl');
+  var cid=localStorage.getItem('i31_gcid')||'';
+  if(!cid){
+    if(bar)bar.style.display='none';
+    return;
+  }
+  if(bar)bar.style.display='flex';
+  if(GMAIL.authed){
+    if(dot)dot.style.background='#4caf50';
+    if(txt)txt.textContent='Gmail autenticado — envio automático activo';
+    if(btn){btn.textContent='✓ Ligado';btn.style.background='#1a3a1a';btn.style.color='#4caf50';btn.style.border='1px solid #4caf50';}
+    if(lbl)lbl.textContent='Enviar Gmail';
+  } else {
+    if(dot)dot.style.background='#ff9800';
+    if(txt)txt.textContent='Gmail configurado mas não autenticado';
+    if(btn){btn.textContent='🔑 Autenticar Gmail';btn.style.background='#FFD600';btn.style.color='#000';}
+    if(lbl)lbl.textContent='Gmail (auth necessária)';
+  }
+}
+
+function doGmailAuth(){
+  if(!GMAIL.tokenClient){
+    var cid=localStorage.getItem('i31_gcid')||'';
+    if(!cid){
+      goTab('cfg');
+      setTimeout(function(){alert('Introduz o teu Google Client ID nas configurações e clica Guardar.');},200);
+      return;
+    }
+    initGmailAPI();
+  }
+  if(GMAIL.tokenClient)GMAIL.tokenClient.requestAccessToken({prompt:'consent'});
+}
+
+function sendGmailAPI(to,subject,htmlBody,onSuccess,onError){
+  var boundary='i31boundary';
+  var email=[
+    'To: '+to,
+    'Subject: =?utf-8?B?'+btoa(unescape(encodeURIComponent(subject)))+'?=',
+    'MIME-Version: 1.0',
+    'Content-Type: multipart/alternative; boundary="'+boundary+'"',
+    '',
+    '--'+boundary,
+    'Content-Type: text/plain; charset=utf-8',
+    'Content-Transfer-Encoding: base64',
+    '',
+    btoa(unescape(encodeURIComponent('Por favor veja este email num cliente que suporte HTML.'))),
+    '',
+    '--'+boundary,
+    'Content-Type: text/html; charset=utf-8',
+    'Content-Transfer-Encoding: base64',
+    '',
+    btoa(unescape(encodeURIComponent(htmlBody))),
+    '',
+    '--'+boundary+'--'
+  ].join('\r\n');
+
+  var encoded=btoa(unescape(encodeURIComponent(email))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+
+  fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send',{
+    method:'POST',
+    headers:{'Authorization':'Bearer '+GMAIL.accessToken,'Content-Type':'application/json'},
+    body:JSON.stringify({raw:encoded})
+  }).then(function(r){
+    if(r.ok){onSuccess();}
+    else{r.json().then(function(e){onError(e.error&&e.error.message||'Erro desconhecido');});}
+  }).catch(function(e){onError(e.message);});
+}
+
+function doGmail(){
+  if(!G.activeSend)return;saveContact();
+  var d=G.activeSend.d,sem=G.activeSend.sem,uid=G.activeSend.uid;
+  var em=G.emails[uid]||'';
+  var sub='Recibo de Pagamento TVDE - '+d.nome+' - Semana '+sem;
+  var emailHTML=buildEmailHTML(d,sem,uid);
+  var pdfHTML=buildPDFHTML(d,sem,uid);
+
+  // If Gmail API authed — send directly!
+  if(GMAIL.authed&&em){
+    var btn=document.getElementById('send-gmail-btn');
+    var lbl=document.getElementById('send-gmail-lbl');
+    if(lbl)lbl.textContent='A enviar...';
+    if(btn)btn.style.opacity='0.6';
+    sendGmailAPI(em,sub,emailHTML,
+      function(){
+        if(lbl)lbl.textContent='✅ Enviado!';
+        if(btn){btn.style.opacity='1';btn.style.borderColor='#4caf50';btn.style.color='#4caf50';}
+        var msg=document.getElementById('sn-msg');
+        msg.textContent='✅ Email enviado para '+em+'!';
+        msg.style.color='#4caf50';
+        setTimeout(function(){
+          if(lbl)lbl.textContent='Enviar Gmail';
+          if(btn){btn.style.opacity='1';btn.style.borderColor='#EA4335';btn.style.color='#EA4335';}
+          msg.textContent='';
+        },4000);
+      },
+      function(err){
+        if(lbl)lbl.textContent='Gmail';
+        if(btn)btn.style.opacity='1';
+        if(err&&err.indexOf('401')>=0){
+          GMAIL.authed=false;GMAIL.accessToken=null;updateAuthUI();
+          alert('Sessão expirada. Clica "Autenticar Gmail" para renovar.');
+        } else {
+          alert('Erro ao enviar: '+err+'\n\nA abrir modo manual...');
+          abrirPopupEmail(d,sem,uid,emailHTML,pdfHTML,em,sub);
+        }
+      }
+    );
+    return;
+  }
+
+  // Not authed — open preview popup (manual mode)
+  if(!em)alert('Define o email do motorista nas Configurações ou no campo Email acima.');
+  abrirPopupEmail(d,sem,uid,emailHTML,pdfHTML,em,sub);
+}
+
+function abrirPopupEmail(d,sem,uid,emailHTML,pdfHTML,em,sub){
+  var gmailURL='https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(em)+'&su='+encodeURIComponent(sub);
+  var popup='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Recibo - '+d.nome+'</title>'
+    +'<style>'
+    +'*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;background:#222}'
+    +'.bar{background:#000;border-bottom:3px solid #FFD600;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;flex-wrap:wrap;gap:8px}'
+    +'.bar h2{color:#FFD600;font-size:13px;font-weight:900}.info{color:#888;font-size:11px;margin-top:2px}'
+    +'.acts{display:flex;gap:8px;flex-wrap:wrap}'
+    +'.btn{padding:8px 16px;border-radius:6px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block;border:none}'
+    +'.bb{background:#1565C0;color:#fff}.bg{background:#EA4335;color:#fff}.by{background:#FFD600;color:#000}.bg2{background:#2e7d32;color:#fff}'
+    +'.tabs{display:flex;border-bottom:2px solid #FFD600}'
+    +'.tab{padding:10px 20px;cursor:pointer;font-size:12px;font-weight:700;border:none;background:#2a2a2a;color:#aaa}'
+    +'.tab.on{background:#FFD600;color:#000}'
+    +'.pane{display:none;overflow-y:auto;max-height:calc(100vh - 110px)}'
+    +'.pane.on{display:block}'
+    +'.tip{background:#fff8e1;border-bottom:2px solid #FFD600;padding:10px 20px;font-size:12px;color:#5d4037;line-height:1.6}'
+    +'@media print{.bar,.tabs,.tip{display:none!important}.pane{display:block!important;padding:0;max-height:none}}'
+    +'</style></head><body>'
+    +'<div class="bar">'
+      +'<div><h2>'+d.nome+' — Semana '+sem+'</h2>'
+      +'<div class="info">Para: '+(em||'sem email definido')+'</div></div>'
+      +'<div class="acts">'
+        +'<button class="btn bb" onclick="window.print()">🖨 PDF</button>'
+        +'<button class="btn by" id="sbtn" onclick="selAll()">① Seleccionar email</button>'
+        +'<a class="btn bg" href="'+gmailURL+'" target="_blank">② Abrir Gmail</a>'
+      +'</div>'
+    +'</div>'
+    +'<div class="tabs">'
+      +'<button class="tab" id="t1" onclick="sw(1)">📄 Recibo PDF</button>'
+      +'<button class="tab on" id="t2" onclick="sw(2)">📧 Email</button>'
+    +'</div>'
+    +'<div class="tip">💡 <b>Como enviar:</b> Clica <b style="color:#c62828">① Seleccionar email</b> → prime <b style="color:#c62828">Ctrl+C</b> → clica <b style="color:#c62828">② Abrir Gmail</b> → no corpo prime <b style="color:#c62828">Ctrl+V</b> → Enviar</div>'
+    +'<div class="pane" id="p1" style="padding:20px;background:#f4f4f4">'+pdfHTML+'</div>'
+    +'<div class="pane on" id="p2" style="background:#f4f4f4;padding:20px">'+emailHTML+'</div>'
+    +'<script>'
+      +'function sw(n){["t1","t2","p1","p2"].forEach(function(id,i){var el=document.getElementById(id);if(!el)return;el.className=(i<2?"tab":"pane")+(((i%2)+1)===n?" on":"");});}'
+      +'function selAll(){sw(2);var el=document.getElementById("p2");var r=document.createRange();r.selectNodeContents(el);var s=window.getSelection();s.removeAllRanges();s.addRange(r);var b=document.getElementById("sbtn");b.textContent="✓ Seleccionado! Prima Ctrl+C";b.className="btn bg2";}'
+    +'<\/script>'
+    +'</body></html>';
+  var w=window.open('','_blank','width=760,height=900');
+  w.document.open();w.document.write(popup);w.document.close();
+}
+
+function doWA(){
+  if(!G.activeSend)return;saveContact();
+  var d=G.activeSend.d,sem=G.activeSend.sem,uid=G.activeSend.uid;
+  var wa=(G.wa[uid]||'').replace(/\D/g,'');
+  var pdfHTML=buildPDFHTML(d,sem,uid);
+
+  // Open popup with the receipt rendered, then use html2canvas to convert to image
+  var popup='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>WhatsApp - '+d.nome+'</title>'
+    +'<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"><\/script>'
+    +'<style>'
+    +'*{box-sizing:border-box;margin:0;padding:0}'
+    +'body{font-family:Arial,sans-serif;background:#222}'
+    +'.bar{background:#000;border-bottom:3px solid #25D366;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;flex-wrap:wrap;gap:8px}'
+    +'.bar h2{color:#25D366;font-size:13px;font-weight:900}'
+    +'.info{color:#888;font-size:11px;margin-top:2px}'
+    +'.acts{display:flex;gap:8px;flex-wrap:wrap}'
+    +'.btn{padding:9px 18px;border-radius:6px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;border:none;display:inline-block;text-decoration:none}'
+    +'.bw{background:#25D366;color:#fff}'
+    +'.bd{background:#128C7E;color:#fff}'
+    +'.bs{background:#555;color:#fff}'
+    +'.tip{background:#1a3a25;border-bottom:2px solid #25D366;padding:10px 20px;font-size:12px;color:#a5d6a7;line-height:1.6}'
+    +'.loading{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:100;align-items:center;justify-content:center;flex-direction:column;gap:16px}'
+    +'.loading p{color:#fff;font-size:14px;font-weight:700}'
+    +'.spinner{width:40px;height:40px;border:4px solid #333;border-top:4px solid #25D366;border-radius:50%;animation:spin .8s linear infinite}'
+    +'@keyframes spin{to{transform:rotate(360deg)}}'
+    +'.preview-img{display:none;padding:20px;background:#111;text-align:center}'
+    +'.preview-img img{max-width:100%;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.5)}'
+    +'#receipt-wrap{padding:20px;background:#f4f4f4}'
+    +'</style></head><body>'
+    +'<div class="bar">'
+      +'<div><h2>💬 Enviar por WhatsApp — '+d.nome+'</h2>'
+      +'<div class="info">'+sem+'</div></div>'
+      +'<div class="acts">'
+        +'<button class="btn bs" onclick="document.getElementById(\"receipt-wrap\").style.display=document.getElementById(\"receipt-wrap\").style.display==\"none\"?\"block\":\"none\"">👁 Ver recibo</button>'
+        +'<button class="btn bd" id="genbtn" onclick="gerarImagem()">📸 Gerar imagem</button>'
+      +'</div>'
+    +'</div>'
+    +'<div class="tip">💡 Clica <b>Gerar imagem</b> para converter o recibo numa imagem. Depois faz <b>download</b> e envia pelo WhatsApp.</div>'
+    +'<div id="loading" class="loading"><div class="spinner"></div><p>A gerar imagem...</p></div>'
+    +'<div id="receipt-wrap">'+pdfHTML+'</div>'
+    +'<div class="preview-img" id="prev">'
+      +'<p style="color:#25D366;font-weight:800;font-size:14px;margin-bottom:12px">✅ Imagem gerada! Guarda e envia pelo WhatsApp.</p>'
+      +'<div style="display:flex;gap:10px;justify-content:center;margin-bottom:16px;flex-wrap:wrap">'
+        +'<a class="btn bw" id="dlbtn" download="Recibo_'+d.nome.replace(/\s/g,'_')+'_'+sem.replace(/[\/\s]/g,'_')+'.png">⬇️ Guardar imagem</a>'
+        +(wa?'<a class="btn bw" id="wabtn" href="https://wa.me/'+wa+'" target="_blank">💬 Abrir WhatsApp</a>':'<a class="btn bw" href="https://wa.me/" target="_blank">💬 Abrir WhatsApp</a>')
+      +'</div>'
+      +'<img id="preview-canvas" src="" alt="Recibo">'
+    +'</div>'
+    +'<script>'
+      +'function gerarImagem(){'
+        +'var el=document.getElementById("receipt-wrap");'
+        +'el.style.display="block";'
+        +'document.getElementById("loading").style.display="flex";'
+        +'document.getElementById("genbtn").disabled=true;'
+        +'setTimeout(function(){'
+          +'html2canvas(el,{scale:2,backgroundColor:"#f4f4f4",useCORS:true,logging:false}).then(function(canvas){'
+            +'var img=canvas.toDataURL("image/png");'
+            +'document.getElementById("preview-canvas").src=img;'
+            +'document.getElementById("dlbtn").href=img;'
+            +'document.getElementById("loading").style.display="none";'
+            +'document.getElementById("prev").style.display="block";'
+            +'el.style.display="none";'
+          +'}).catch(function(e){'
+            +'document.getElementById("loading").style.display="none";'
+            +'alert("Erro ao gerar imagem: "+e.message);'
+          +'});'
+        +'},100);'
+      +'}'
+    +'<\/script>'
+    +'</body></html>';
+
+  var w=window.open('','_blank','width=700,height=860');
+  w.document.open();w.document.write(popup);w.document.close();
+}
+
+function doPDF(){
+  if(!G.activeSend)return;saveContact();
+  var d=G.activeSend.d,sem=G.activeSend.sem,uid=G.activeSend.uid;
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Recibo '+d.nome+'</title><style>@media print{body{margin:0}}</style></head><body>'+buildPDFHTML(d,sem,uid)+'<script>window.onload=function(){window.print();window.close();};<\/script></body></html>';
+  var w=window.open('','_blank','width=720,height=900');w.document.open();w.document.write(html);w.document.close();
+}
+
+function doCopy(){
+  if(!G.activeSend)return;
+  var txt=buildTextMsg(G.activeSend.d,G.activeSend.sem,G.activeSend.uid);
+  navigator.clipboard.writeText(txt).then(function(){var msg=document.getElementById('sn-msg');msg.textContent='✅ Texto copiado!';setTimeout(function(){msg.textContent='';},2500);}).catch(function(){prompt('Copia:',txt);});
+}
+
+// CONFIG
+function renderCfg(){
+  document.getElementById('cfg-iva').value=G.cfg.iva;document.getElementById('cfg-slot').value=G.cfg.slot;
+  var cid=localStorage.getItem('i31_gcid')||'';
+  var cinp=document.getElementById('gcid-inp');if(cinp)cinp.value=cid;
+  var cbtn=document.getElementById('gauth-cfg-btn');if(cbtn)cbtn.style.display=cid?'inline-block':'none';
+  var sem=lastSem(),wrap=document.getElementById('cfg-drv');
+  if(!sem){wrap.innerHTML='<p style="font-size:13px;color:#666">Carrega um CSV primeiro.</p>';return;}
+  var html='<div class="tover"><table><thead><tr><th>Motorista</th><th>Email</th><th>WhatsApp</th><th>IBAN</th><th>Aluguer (€)</th><th>Slot (€)</th><th>IVA Uber (%)</th><th style="background:#1a3300;color:#aeea00">IVA cobrar</th></tr></thead><tbody>';
+  sem.drivers.forEach(function(d){
+    var em=G.emails[d.uid]||'',wa=G.wa[d.uid]||'',ib=G.iban[d.uid]||'';
+    var al=G.aluguer[d.uid]!==undefined?G.aluguer[d.uid]:0,sl=G.slots[d.uid]!==undefined?G.slots[d.uid]:G.cfg.slot;
+    var iv=G.ivaUber[d.uid]!==undefined?G.ivaUber[d.uid]:G.cfg.iva,ivc=G.ivaCob[d.uid]!==undefined?G.ivaCob[d.uid]:0;
+    html+='<tr><td><b>'+d.nome+'</b></td>'
+      +'<td><input type="text" id="cem-'+d.uid+'" value="'+em+'" placeholder="email" style="width:170px;font-size:12px"></td>'
+      +'<td><input type="text" id="cwa-'+d.uid+'" value="'+wa+'" placeholder="+351..." style="width:130px;font-size:12px"></td>'
+      +'<td><input type="text" id="cib-'+d.uid+'" value="'+ib+'" placeholder="PT50..." style="width:200px;font-size:12px"></td>'
+      +'<td><input type="number" id="cal-'+d.uid+'" value="'+al+'" step="0.01" style="width:75px"></td>'
+      +'<td><input type="number" id="csl-'+d.uid+'" value="'+sl+'" step="0.01" style="width:70px"></td>'
+      +'<td><input type="number" id="civ-'+d.uid+'" value="'+iv+'" step="0.1" min="0" max="100" style="width:60px"></td>'
+      +'<td><select id="civc-'+d.uid+'" style="padding:5px 8px;border-radius:5px;border:1px solid #444;font-size:12px;background:#1a1a1a;color:#aeea00">'
+        +'<option value="0"'+(ivc===0?' selected':'')+'>Isento</option>'
+        +'<option value="6"'+(ivc===6?' selected':'')+'>6%</option>'
+        +'<option value="23"'+(ivc===23?' selected':'')+'>23%</option>'
+      +'</select></td></tr>';
+  });
+  wrap.innerHTML=html+'</tbody></table></div><div style="margin-top:12px"><button class="btn bty" onclick="saveDrvCfg()">Guardar configurações</button></div>';
+}
+
+function saveDrvCfg(){
+  var sem=lastSem();if(!sem)return;
+  sem.drivers.forEach(function(d){
+    var em=document.getElementById('cem-'+d.uid),wa=document.getElementById('cwa-'+d.uid),ib=document.getElementById('cib-'+d.uid);
+    var al=document.getElementById('cal-'+d.uid),sl=document.getElementById('csl-'+d.uid),iv=document.getElementById('civ-'+d.uid),ivc=document.getElementById('civc-'+d.uid);
+    if(em)G.emails[d.uid]=em.value.trim();if(wa)G.wa[d.uid]=wa.value.trim();if(ib)G.iban[d.uid]=ib.value.trim();
+    if(al){var v=parseFloat(al.value);if(!isNaN(v))G.aluguer[d.uid]=v;}
+    if(sl){var v=parseFloat(sl.value);if(!isNaN(v))G.slots[d.uid]=v;}
+    if(iv){var v=parseFloat(iv.value);if(!isNaN(v))G.ivaUber[d.uid]=v;}
+    if(ivc)G.ivaCob[d.uid]=parseFloat(ivc.value)||0;
+  });
+  saveAll();var msg=document.getElementById('cfg-msg');msg.textContent='✅ Guardado!';setTimeout(function(){msg.textContent='';},2000);
+}
+
+function saveGCID(){
+  var v=document.getElementById('gcid-inp').value.trim();
+  if(!v){alert('Introduz o Client ID.');return;}
+  localStorage.setItem('i31_gcid',v);
+  GMAIL.CLIENT_ID=v;
+  initGmailAPI();
+  document.getElementById('gauth-cfg-btn').style.display='inline-block';
+  var msg=document.getElementById('gcid-msg');
+  msg.textContent='✅ Client ID guardado! Clica "Autenticar Gmail".';
+  setTimeout(function(){msg.textContent='';},4000);
+}
+
+function saveCfg(){
+  G.cfg.iva=parseFloat(document.getElementById('cfg-iva').value)||6;G.cfg.slot=parseFloat(document.getElementById('cfg-slot').value)||35;
+  try{localStorage.setItem('i31_cfg',JSON.stringify(G.cfg));}catch(e){}saveDrvCfg();
+}
+
+// HISTÓRICO
+function renderHist(){
+  var wrap=document.getElementById('hist-body');
+  if(!G.list.length){wrap.innerHTML='<p style="text-align:center;color:#666;padding:30px;font-size:13px">Sem registos ainda.</p>';return;}
+  var html='<div class="tover"><table><thead><tr><th>Semana</th><th>Data</th><th>Motoristas</th><th>Uber bruto</th><th>Bolt líq.</th><th>IVA cobrar</th><th>Aluguer</th><th>Total pago</th><th>Transferido</th><th>Estado</th></tr></thead><tbody>';
+  G.list.slice().reverse().forEach(function(sem){
+    var t=sem.totals,tt=r2(Object.values(sem.transf).reduce(function(s,v){return s+(v.val||0);},0));
+    var pN=sem.drivers.filter(function(d){var tr=sem.transf[d.uid];return tr&&tr.val>=d.total;}).length,ok=pN===sem.drivers.length;
+    html+='<tr><td><b>'+sem.sem+'</b></td><td>'+sem.dt+'</td><td style="text-align:center">'+sem.drivers.length+'</td><td>'+fm(t.uBruto||0)+'</td><td style="color:#34d186">'+fm(t.bLiq||0)+'</td><td style="color:#aeea00">'+fm(t.ivaCob||0)+'</td><td style="color:#ff6b6b">'+fm(t.alug||0)+'</td><td style="color:#FFD600;font-weight:800">'+fm(t.total)+'</td><td style="color:#4caf50">'+fm(tt)+'</td><td><span class="badge '+(ok?'bok':'bpend')+'">'+(ok?'✅ Completo':'⏳ Em curso')+' ('+pN+'/'+sem.drivers.length+')</span></td></tr>';
+  });
+  wrap.innerHTML=html+'</tbody></table></div>';
+}
+
+function exportCSV(){
+  var sem=lastSem();if(!sem){alert('Sem dados.');return;}
+  var csv='Motorista;Uber Bruto;IVA Uber%;IVA Uber\u20ac;Bolt Liq;Bolt IVA;Rend.Liq;IVA Cobrar%;IVA Cobrar\u20ac;Slot;Aluguer;Via Verde;Carreg;A Receber;Transferido;Referencia\n';
+  sem.drivers.forEach(function(d){var tr=sem.transf[d.uid];csv+=d.nome+';'+fn(d.uBruto)+';'+d.ivaPct+';'+fn(d.uIVA)+';'+fn(d.bLiq)+';'+fn(d.bIVA)+';'+fn(d.rendLiq)+';'+d.ivaCobPct+';'+fn(d.ivaCobEur)+';'+fn(d.slot)+';'+fn(d.alug)+';'+fn(d.vv)+';'+fn(d.carr)+';'+fn(d.total)+';'+(tr?fn(tr.val):'0,00')+';'+(tr&&tr.ref?tr.ref:'—')+'\n';});
+  var blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='TVDE_'+sem.sem.replace(/\//g,'-')+'.csv';a.click();URL.revokeObjectURL(url);
+}
+
+function exportHistCSV(){
+  if(!G.list.length){alert('Sem dados.');return;}
+  var csv='Semana;Motorista;Uber Bruto;Bolt Liq;Rend.Liq;IVA Cobrar\u20ac;Slot;Aluguer;VV;Carreg;A Receber;Transferido;Referencia;Data\n';
+  G.list.forEach(function(sem){sem.drivers.forEach(function(d){var tr=sem.transf[d.uid];csv+=sem.sem+';'+d.nome+';'+fn(d.uBruto)+';'+fn(d.bLiq)+';'+fn(d.rendLiq)+';'+fn(d.ivaCobEur)+';'+fn(d.slot)+';'+fn(d.alug)+';'+fn(d.vv||0)+';'+fn(d.carr||0)+';'+fn(d.total)+';'+(tr?fn(tr.val):'0,00')+';'+(tr&&tr.ref?tr.ref:'—')+';'+(tr&&tr.data?tr.data:'—')+'\n';});});
+  var blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='TVDE_Historico.csv';a.click();URL.revokeObjectURL(url);
+}
+
+renderRes();renderHist();
+// Init Gmail API if Client ID already configured
+setTimeout(function(){
+  var cid=localStorage.getItem('i31_gcid')||'';
+  if(cid)initGmailAPI();
+},500);
+</script>
+</body>
+</html>
