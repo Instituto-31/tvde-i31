@@ -748,15 +748,18 @@ function matchBolt(uA,bA){
       }
     }
 
-    // 2. Fallback: match por primeiro nome
+    // 2. Fallback: match por primeiro nome (ignora partes <3 chars como "e", "-", "da")
     if(!match){
       var bf=b.bNome.split(' ')[0].toLowerCase();
-      for(var i=0;i<uA.length;i++){
-        var p=uA[i].nome.toLowerCase().split(' ');
-        for(var j=0;j<p.length;j++){
-          if(p[j].indexOf(bf)>=0||bf.indexOf(p[j])>=0){match=uA[i];break;}
+      if(bf.length>=3){
+        for(var i=0;i<uA.length;i++){
+          var p=uA[i].nome.toLowerCase().split(' ');
+          for(var j=0;j<p.length;j++){
+            if(p[j].length<3)continue;
+            if(p[j].indexOf(bf)>=0||bf.indexOf(p[j])>=0){match=uA[i];break;}
+          }
+          if(match)break;
         }
-        if(match)break;
       }
     }
 
